@@ -1,4 +1,4 @@
-package scoringItem
+package scoring
 
 type scoringItemBridge struct {
 	ID          string `json:"id"`
@@ -7,7 +7,7 @@ type scoringItemBridge struct {
 	Expression  map[string]interface{}
 }
 
-func bridgeFromScoreItem(source ScoringItem) *scoringItemBridge {
+func bridgeFromScoreItem(source Item) *scoringItemBridge {
 	return &scoringItemBridge{
 		ID:          source.id,
 		Name:        source.name,
@@ -16,9 +16,6 @@ func bridgeFromScoreItem(source ScoringItem) *scoringItemBridge {
 	}
 }
 
-func (b *scoringItemBridge) toScoringItem(target *ScoringItem) {
-	target.id = b.ID
-	target.name = b.Name
-	target.description = b.Description
-	target.expression = b.Expression
+func (b *scoringItemBridge) toScoringItem() *Item {
+	return New(b.ID, b.Name, b.Description, b.Expression)
 }
