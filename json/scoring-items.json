@@ -1,0 +1,208 @@
+{
+  "score-hit": {
+    "name": "Score Hit",
+    "description": "When prediction hit exact score",
+    "expression": {
+      "type": "booleanOperation",
+      "name": "and",
+      "operands": [
+        {
+          "type": "booleanOperation",
+          "name": "eq",
+          "operands": [
+            {
+              "type": "intVariable",
+              "value": "match.home.score"
+            },
+            {
+              "type": "intVariable",
+              "value": "prediction.home.score"
+            }
+          ]
+        },
+        {
+          "type": "booleanOperation",
+          "name": "eq",
+          "operands": [
+            {
+              "type": "intVariable",
+              "value": "match.away.score"
+            },
+            {
+              "type": "intVariable",
+              "value": "prediction.away.score"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "score-diff-hit": {
+    "name": "Score Diff Hit",
+    "description": "When prediction hits the winner (not draw) and hits score difference",
+    "expression": {
+      "type": "booleanOperation",
+      "name": "and",
+      "operands": [
+        {
+          "type": "booleanOperation",
+          "name": "not",
+          "operands": [
+            {
+              "type": "booleanOperation",
+              "name": "eq",
+              "operands": [
+                {
+                  "type": "intVariable",
+                  "value": "match.home.score"
+                },
+                {
+                  "type": "intVariable",
+                  "value": "match.away.score"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "booleanOperation",
+          "name": "eq",
+          "operands": [
+            {
+              "type": "intOperation",
+              "name": "substraction",
+              "operands": [
+                {
+                  "type": "intVariable",
+                  "value": "match.home.score"
+                },
+                {
+                  "type": "intVariable",
+                  "value": "match.away.score"
+                }
+              ]
+            },
+            {
+              "type": "intOperation",
+              "name": "substraction",
+              "operands": [
+                {
+                  "type": "intVariable",
+                  "value": "prediction.home.score"
+                },
+                {
+                  "type": "intVariable",
+                  "value": "prediction.away.score"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "winner-hit": {
+    "name": "Winner Hit",
+    "description": "When prediction hit winner (or draw) but not score",
+    "expression": {
+      "type": "booleanOperation",
+      "name": "eq",
+      "operands": [
+        {
+          "type": "intOperation",
+          "name": "clamp",
+          "operands": [
+            {
+              "type": "intOperation",
+              "name": "substraction",
+              "operands": [
+                {
+                  "type": "intVariable",
+                  "value": "match.home.score"
+                },
+                {
+                  "type": "intVariable",
+                  "value": "match.away.score"
+                }
+              ]
+            },
+            {
+              "type": "intConstant",
+              "value": -1
+            },
+            {
+              "type": "intConstant",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "intOperation",
+          "name": "clamp",
+          "operands": [
+            {
+              "type": "intOperation",
+              "name": "substraction",
+              "operands": [
+                {
+                  "type": "intVariable",
+                  "value": "prediction.home.score"
+                },
+                {
+                  "type": "intVariable",
+                  "value": "prediction.away.score"
+                }
+              ]
+            },
+            {
+              "type": "intConstant",
+              "value": -1
+            },
+            {
+              "type": "intConstant",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "one-side-score-hit": {
+    "name": "One Side Score Hit",
+    "description": "When prediction doesn't hit winner (or draw) but hits one side score",
+    "expression": {
+      "type": "booleanOperation",
+      "name": "or",
+      "operands": [
+        {
+          "type": "booleanOperation",
+          "name": "eq",
+          "operands": [
+            {
+              "type": "intVariable",
+              "value": "match.home.score"
+            },
+            {
+              "type": "intVariable",
+              "value": "prediction.home.score"
+            }
+          ]
+        },
+        {
+          "type": "booleanOperation",
+          "name": "eq",
+          "operands": [
+            {
+              "type": "intVariable",
+              "value": "match.away.score"
+            },
+            {
+              "type": "intVariable",
+              "value": "prediction.away.score"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
