@@ -2,7 +2,6 @@ package scoring
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 type Repository struct {
@@ -32,7 +31,7 @@ func NewRepositoryFromData(data []byte) (*Repository, error) {
 
 func (r *Repository) ExecuteItem(itemID string) (bool, error) {
 	if _, exists := r.items[itemID]; !exists {
-		return false, fmt.Errorf("no \"%s\" item found", itemID)
+		return false, NoScoringItemFound
 	} else {
 		// TODO: call item.resolve()
 		return true, nil

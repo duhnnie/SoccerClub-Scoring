@@ -1,8 +1,6 @@
 package variable
 
 import (
-	"errors"
-	"fmt"
 	"strings"
 )
 
@@ -21,7 +19,7 @@ func Resolve(target, path interface{}) (interface{}, error) {
 
 	if pathArray, ok := path.([]string); !ok {
 		if pathString, ok := path.(string); !ok {
-			return nil, errors.New("second argument needs to be a slice of strings or string")
+			return nil, ErrorResolveInvalidParams
 		} else if len(pathString) == 0 {
 			return target, nil
 		} else {
@@ -34,7 +32,7 @@ func Resolve(target, path interface{}) (interface{}, error) {
 	}
 
 	if targetMap, ok := target.(map[string]interface{}); !ok {
-		return nil, errors.New("\"target\" parameter should be a \"map[string]interface{}\" when second argument is not an empty string nor empty string slice")
+		return nil, ErrorResolveInvalidFirstParam
 	} else {
 		newTarget := targetMap[newPath[0]]
 		return Resolve(newTarget, newPath[1:])
@@ -51,8 +49,7 @@ func (r *Repository) get(variableName string) (interface{}, error) {
 	targetObject := r.variables[name]
 
 	if targetObject == nil {
-		// TODO: define our own errors somewhere
-		return nil, fmt.Errorf("No value for variable \"%s\"", variableName)
+		return nil, ErrorNoValueFound
 	}
 
 	return Resolve(targetObject, path[1:])
@@ -62,7 +59,7 @@ func (r *Repository) GetInt(variableName string) (int, error) {
 	if resolvedValue, err := r.get(variableName); err != nil {
 		return 0, err
 	} else if intValue, ok := resolvedValue.(int); !ok {
-		return 0, errors.New("can't resolve to specified type")
+		return 0, ErrorCantResolveToType
 	} else {
 		return intValue, nil
 	}
@@ -72,7 +69,7 @@ func (r *Repository) GetFloat32(variableName string) (float32, error) {
 	if resolvedValue, err := r.get(variableName); err != nil {
 		return 0, err
 	} else if floatValue, ok := resolvedValue.(float32); !ok {
-		return 0, errors.New("can't resolve to specified type")
+		return 0, ErrorCantResolveToType
 	} else {
 		return floatValue, nil
 	}
@@ -82,7 +79,7 @@ func (r *Repository) GetBool(variableName string) (bool, error) {
 	if resolvedValue, err := r.get(variableName); err != nil {
 		return false, err
 	} else if boolValue, ok := resolvedValue.(bool); !ok {
-		return false, errors.New("can't resolve to specified type")
+		return false, ErrorCantResolveToType
 	} else {
 		return boolValue, nil
 	}
@@ -92,7 +89,7 @@ func (r *Repository) GetString(variableName string) (string, error) {
 	if resolvedValue, err := r.get(variableName); err != nil {
 		return "", err
 	} else if stringValue, ok := resolvedValue.(string); !ok {
-		return "", errors.New("can't resolve to specified type")
+		return "", ErrorCantResolveToType
 	} else {
 		return stringValue, nil
 	}
