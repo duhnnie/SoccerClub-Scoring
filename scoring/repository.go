@@ -5,19 +5,19 @@ import (
 	"fmt"
 )
 
-type ItemRepository struct {
+type Repository struct {
 	items map[string]*Item
 }
 
-func NewItemRepository(items map[string]*Item) *ItemRepository {
-	return &ItemRepository{
+func NewRepository(items map[string]*Item) *Repository {
+	return &Repository{
 		items: items,
 	}
 }
 
-func NewItemRepositoryFromData(data []byte) (*ItemRepository, error) {
+func NewRepositoryFromData(data []byte) (*Repository, error) {
 	items := make(map[string]*Item)
-	dictionary := make(map[string]scoringItemBridge)
+	dictionary := make(map[string]itemBridge)
 
 	if err := json.Unmarshal(data, &dictionary); err != nil {
 		return nil, err
@@ -27,10 +27,10 @@ func NewItemRepositoryFromData(data []byte) (*ItemRepository, error) {
 		items[key] = value.toScoringItem()
 	}
 
-	return NewItemRepository(items), nil
+	return NewRepository(items), nil
 }
 
-func (r *ItemRepository) ExecuteItem(itemID string) (bool, error) {
+func (r *Repository) ExecuteItem(itemID string) (bool, error) {
 	if _, exists := r.items[itemID]; !exists {
 		return false, fmt.Errorf("no \"%s\" item found", itemID)
 	} else {

@@ -19,7 +19,7 @@ func New(id, name, description string, expression map[string]interface{}) *Item 
 }
 
 func NewFromData(id string, data []byte) (*Item, error) {
-	bridge := scoringItemBridge{}
+	bridge := itemBridge{}
 
 	if err := json.Unmarshal(data, &bridge); err != nil {
 		return nil, err
