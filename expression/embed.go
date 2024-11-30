@@ -1,9 +1,9 @@
 package expression
 
-type expressionExpType[T ~string] struct {
-	expType T
+type expressionExpType struct {
+	expType string
 }
 
-func (s *expressionExpType[T]) GetType() string {
+func (s *expressionExpType) GetType() string {
 	return string(s.expType)
 }

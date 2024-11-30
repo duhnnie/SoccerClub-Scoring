@@ -33,7 +33,17 @@ func (e UnknownExpressionType) Error() string {
 	return fmt.Sprintf("unknown expression type \"%s\"", string(e))
 }
 
+type ChildError struct {
+	index   int
+	err     error
+	expType string
+}
+
+func (err *ChildError) Error() string {
+	return fmt.Sprintf("Error in %s expression, operand #%d:\n%s", err.expType, err.index, err.err)
+}
+
 const (
-	ErrorInvalidExpressionType = Error("invalid data type for expression \"type\" property")
-	ErrorNoExpressionTypeFound = Error("no \"type\" property found for operation expression")
+	ErrorNoExpressionTypeFound    = Error("no \"type\" property found for operation expression")
+	ErrorInvalidExpressionDefType = Error("invalid data type for expression definition, a map was expected")
 )

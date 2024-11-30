@@ -8,29 +8,26 @@ type constantExpressionValueType interface {
 	int | bool
 }
 
-const (
-	ExpressionTypeBooleanOperation = operationExpressionType("booleanOperation")
-	ExpressionTypeIntOperation     = operationExpressionType("intOperation")
-	ExpressionTypeIntVariable      = variableExpressionType("intVariable")
-	ExpressionTypeIntConstant      = constantExpressionType("intConstant")
-)
-
 type Expression interface {
 	GetType() string
 }
 
 type OperationExpression struct {
-	expressionExpType[operationExpressionType]
+	expressionExpType
 	name     string
 	operands []Expression
 }
 
+func (exp *OperationExpression) GetOperands() []Expression {
+	return exp.operands
+}
+
 type VariableExpression struct {
-	expressionExpType[variableExpressionType]
+	expressionExpType
 	name string
 }
 
 type ConstantExpression[U constantExpressionValueType] struct {
-	expressionExpType[constantExpressionType]
+	expressionExpType
 	value U
 }
