@@ -1,11 +1,7 @@
 package expression
 
-type operationExpressionType string
-type variableExpressionType string
-type constantExpressionType string
-
 type constantExpressionValueType interface {
-	int | bool
+	int | float64 | bool
 }
 
 type Expression interface {

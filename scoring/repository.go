@@ -2,6 +2,7 @@ package scoring
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 type Repository struct {
@@ -23,17 +24,22 @@ func NewRepositoryFromData(data []byte) (*Repository, error) {
 	}
 
 	for key, value := range dictionary {
-		items[key] = value.toScoringItem()
+		if item, err := value.toScoringItem(); err != nil {
+			return nil, err
+		} else {
+			items[key] = item
+		}
 	}
 
 	return NewRepository(items), nil
 }
 
 func (r *Repository) ExecuteItem(itemID string) (bool, error) {
-	if _, exists := r.items[itemID]; !exists {
+	if scoringItem, exists := r.items[itemID]; !exists {
 		return false, NoScoringItemFound
 	} else {
 		// TODO: call item.resolve()
+		fmt.Printf("Expression: %+v", scoringItem.expression)
 		return true, nil
 	}
 }

@@ -3,22 +3,30 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/duhnnie/soccerclub-scoring/expression"
+	"github.com/duhnnie/soccerclub-scoring/scoring"
 )
 
 type StringType string
 
 func main() {
-	// data, _ := os.ReadFile("./json/scoring-items.json")
-	// repo, _ := scoring.NewRepositoryFromData(data)
-	// _, err := repo.ExecuteItem("score-hit")
+	data, _ := os.ReadFile("./json/scoring-items.json")
+	repo, err := scoring.NewRepositoryFromData(data)
 
-	// if err != nil {
-	// 	fmt.Println("error", err)
-	// } else {
-	// 	println("good")
-	// }
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	_, err = repo.ExecuteItem("score-hit")
+
+	if err != nil {
+		fmt.Println("error", err)
+	} else {
+		println("good")
+	}
 
 	// vars := make(map[string]interface{})
 	// vars["home"] = make(map[string]interface{})

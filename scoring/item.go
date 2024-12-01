@@ -1,15 +1,19 @@
 package scoring
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/duhnnie/soccerclub-scoring/expression"
+)
 
 type Item struct {
 	id          string
 	name        string
 	description string
-	expression  map[string]interface{}
+	expression  expression.Expression
 }
 
-func New(id, name, description string, expression map[string]interface{}) *Item {
+func New(id, name, description string, expression expression.Expression) *Item {
 	return &Item{
 		id:          id,
 		name:        name,
@@ -26,17 +30,17 @@ func NewFromData(id string, data []byte) (*Item, error) {
 	}
 
 	bridge.ID = id
-	return bridge.toScoringItem(), nil
+	return bridge.toScoringItem()
 }
 
 func NewFromString(id, data string) (*Item, error) {
 	return NewFromData(id, []byte(data))
 }
 
-func (s *Item) ToJSON() ([]byte, error) {
-	bridge := bridgeFromScoreItem(*s)
-	return json.Marshal(bridge)
-}
+// func (s *Item) ToJSON() ([]byte, error) {
+// 	bridge := bridgeFromScoreItem(*s)
+// 	return json.Marshal(bridge)
+// }
 
 func (s *Item) GetID() string {
 	return s.id
@@ -50,6 +54,6 @@ func (s *Item) GetDescription() string {
 	return s.description
 }
 
-func (s *Item) GetExpression() map[string]interface{} {
+func (s *Item) GetExpression() expression.Expression {
 	return s.expression
 }

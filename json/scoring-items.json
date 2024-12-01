@@ -12,11 +12,11 @@
           "operands": [
             {
               "type": "intVariable",
-              "value": "match.home.score"
+              "name": "match.home.score"
             },
             {
               "type": "intVariable",
-              "value": "prediction.home.score"
+              "name": "prediction.home.score"
             }
           ]
         },
@@ -26,11 +26,11 @@
           "operands": [
             {
               "type": "intVariable",
-              "value": "match.away.score"
+              "name": "match.away.score"
             },
             {
               "type": "intVariable",
-              "value": "prediction.away.score"
+              "name": "prediction.away.score"
             }
           ]
         }
@@ -54,11 +54,11 @@
               "operands": [
                 {
                   "type": "intVariable",
-                  "value": "match.home.score"
+                  "name": "match.home.score"
                 },
                 {
                   "type": "intVariable",
-                  "value": "match.away.score"
+                  "name": "match.away.score"
                 }
               ]
             }
@@ -74,11 +74,11 @@
               "operands": [
                 {
                   "type": "intVariable",
-                  "value": "match.home.score"
+                  "name": "match.home.score"
                 },
                 {
                   "type": "intVariable",
-                  "value": "match.away.score"
+                  "name": "match.away.score"
                 }
               ]
             },
@@ -88,11 +88,11 @@
               "operands": [
                 {
                   "type": "intVariable",
-                  "value": "prediction.home.score"
+                  "name": "prediction.home.score"
                 },
                 {
                   "type": "intVariable",
-                  "value": "prediction.away.score"
+                  "name": "prediction.away.score"
                 }
               ]
             }
@@ -118,11 +118,11 @@
               "operands": [
                 {
                   "type": "intVariable",
-                  "value": "match.home.score"
+                  "name": "match.home.score"
                 },
                 {
                   "type": "intVariable",
-                  "value": "match.away.score"
+                  "name": "match.away.score"
                 }
               ]
             },
@@ -146,11 +146,11 @@
               "operands": [
                 {
                   "type": "intVariable",
-                  "value": "prediction.home.score"
+                  "name": "prediction.home.score"
                 },
                 {
                   "type": "intVariable",
-                  "value": "prediction.away.score"
+                  "name": "prediction.away.score"
                 }
               ]
             },
@@ -180,11 +180,11 @@
           "operands": [
             {
               "type": "intVariable",
-              "value": "match.home.score"
+              "name": "match.home.score"
             },
             {
               "type": "intVariable",
-              "value": "prediction.home.score"
+              "name": "prediction.home.score"
             }
           ]
         },
@@ -194,11 +194,11 @@
           "operands": [
             {
               "type": "intVariable",
-              "value": "match.away.score"
+              "name": "match.away.score"
             },
             {
               "type": "intVariable",
-              "value": "prediction.away.score"
+              "name": "prediction.away.score"
             }
           ]
         }

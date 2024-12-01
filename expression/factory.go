@@ -68,12 +68,12 @@ func CreateIntConstantExpression(def rawExpression) (*ConstantExpression[int], e
 
 	if value, exists := def["value"]; !exists {
 		return nil, &MissingPropertyError{string(expType), "value"}
-	} else if value, ok := value.(int); !ok {
+	} else if value, ok := value.(float64); !ok {
 		return nil, &InvalidPropertyTypeError{string(expType), "value", "int"}
 	} else {
 		return &ConstantExpression[int]{
 			expressionExpType: expressionExpType{expType},
-			value:             value,
+			value:             int(value),
 		}, nil
 	}
 }
