@@ -3,8 +3,11 @@ package expression
 import (
 	"encoding/json"
 	"reflect"
+<<<<<<< HEAD
 
 	"github.com/duhnnie/soccerclub-scoring/expression"
+=======
+>>>>>>> df11b0d (Re-implement scoring items)
 )
 
 type OperationExpression struct {
@@ -32,7 +35,7 @@ func (exp *OperationExpression) UnmarshalJSON(data []byte) error {
 		fieldValue := valueElem.Field(i)
 
 		if jsonData, exists := m[jsonField]; !exists && isRequired {
-			return expression.MissingRequiredProperty(jsonField)
+			return ErrorMissingRequiredProperty(jsonField)
 		} else if !exists {
 			continue
 		} else {
