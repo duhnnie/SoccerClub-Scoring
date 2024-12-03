@@ -1,5 +1,6 @@
-{
-  "score-hit": {
+[
+  {
+    "id": "score-hit",
     "name": "Score Hit",
     "description": "When prediction hit exact score",
     "expression": {
@@ -37,7 +38,8 @@
       ]
     }
   },
-  "score-diff-hit": {
+  {
+    "id": "score-diff-hit",
     "name": "Score Diff Hit",
     "description": "When prediction hits the winner (not draw) and hits score difference",
     "expression": {
@@ -101,7 +103,8 @@
       ]
     }
   },
-  "winner-hit": {
+  {
+    "id": "winner-hit",
     "name": "Winner Hit",
     "description": "When prediction hit winner (or draw) but not score",
     "expression": {
@@ -167,7 +170,8 @@
       ]
     }
   },
-  "one-side-score-hit": {
+  {
+    "id": "one-side-score-hit",
     "name": "One Side Score Hit",
     "description": "When prediction doesn't hit winner (or draw) but hits one side score",
     "expression": {
@@ -205,4 +209,4 @@
       ]
     }
   }
-}
+]

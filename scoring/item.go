@@ -10,50 +10,40 @@ type Item struct {
 	id          string
 	name        string
 	description string
-	expression  expression.Expression
+	expression  *expression.OperationExpression
 }
 
-func New(id, name, description string, expression expression.Expression) *Item {
-	return &Item{
-		id:          id,
-		name:        name,
-		description: description,
-		expression:  expression,
-	}
-}
-
-func NewFromData(id string, data []byte) (*Item, error) {
-	bridge := itemBridge{}
-
-	if err := json.Unmarshal(data, &bridge); err != nil {
-		return nil, err
+func (i *Item) UnmarshalJSON(data []byte) error {
+	var jsonStruct struct {
+		ID          string          `json:"id"`
+		Name        string          `json:"name"`
+		Description string          `json:"description"`
+		Expression  json.RawMessage `json:"expression"`
 	}
 
-	bridge.ID = id
-	return bridge.toScoringItem()
-}
+	if err := json.Unmarshal(data, &jsonStruct); err != nil {
+		return err
+	}
 
-func NewFromString(id, data string) (*Item, error) {
-	return NewFromData(id, []byte(data))
-}
+	exp, err := expression.UnmarshalExpression(jsonStruct.Expression)
 
-// func (s *Item) ToJSON() ([]byte, error) {
-// 	bridge := bridgeFromScoreItem(*s)
-// 	return json.Marshal(bridge)
-// }
+	if err != nil {
+		return err
+	}
 
-func (s *Item) GetID() string {
-	return s.id
-}
+	var opExp *expression.OperationExpression
+	var ok bool
 
-func (s *Item) GetName() string {
-	return s.name
-}
+	if opExp, ok = exp.(*expression.OperationExpression); !ok {
+		return NoBooleanOperationExpression
+	} else if opExp.Type != expression.ExpTypeBooleanOperation {
+		return NoBooleanOperationExpression
+	}
 
-func (s *Item) GetDescription() string {
-	return s.description
-}
+	i.id = jsonStruct.ID
+	i.name = jsonStruct.Name
+	i.description = jsonStruct.Description
+	i.expression = opExp
 
-func (s *Item) GetExpression() expression.Expression {
-	return s.expression
+	return nil
 }

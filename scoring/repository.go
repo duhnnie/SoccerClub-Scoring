@@ -16,22 +16,26 @@ func NewRepository(items map[string]*Item) *Repository {
 }
 
 func NewRepositoryFromData(data []byte) (*Repository, error) {
-	items := make(map[string]*Item)
-	dictionary := make(map[string]itemBridge)
+	var jsonStruct []json.RawMessage
+	items := map[string]*Item{}
 
-	if err := json.Unmarshal(data, &dictionary); err != nil {
+	if err := json.Unmarshal(data, &jsonStruct); err != nil {
 		return nil, err
 	}
 
-	for key, value := range dictionary {
-		if item, err := value.toScoringItem(); err != nil {
+	for _, itemData := range jsonStruct {
+		var item Item
+
+		if err := json.Unmarshal(itemData, &item); err != nil {
 			return nil, err
-		} else {
-			items[key] = item
 		}
+
+		items[item.id] = &item
 	}
 
-	return NewRepository(items), nil
+	return &Repository{
+		items: items,
+	}, nil
 }
 
 func (r *Repository) ExecuteItem(itemID string) (bool, error) {

@@ -1,6 +1,9 @@
 package expression
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 type Error string
 
@@ -8,42 +11,25 @@ func (e Error) Error() string {
 	return string(e)
 }
 
-type MissingPropertyError struct {
-	expType  string
-	property string
-}
+type ErrorUnknownExpressionType string
 
-func (e *MissingPropertyError) Error() string {
-	return fmt.Sprintf("no \"%s\" property found for \"%s\" expression type", e.property, e.expType)
-}
-
-type InvalidPropertyTypeError struct {
-	expType      string
-	property     string
-	expectedType string
-}
-
-func (e *InvalidPropertyTypeError) Error() string {
-	return fmt.Sprintf("invalid type for property \"%s\" for \"%s\" expression type: \"%s\" expected", e.property, e.expType, e.expectedType)
-}
-
-type UnknownExpressionType string
-
-func (e UnknownExpressionType) Error() string {
+func (e ErrorUnknownExpressionType) Error() string {
 	return fmt.Sprintf("unknown expression type \"%s\"", string(e))
 }
 
-type ChildError struct {
-	index   int
-	err     error
-	expType string
+type ErrorMissingRequiredProperty string
+
+func (m ErrorMissingRequiredProperty) Error() string {
+	return fmt.Sprintf("missing required property: %s", string(m))
 }
 
-func (err *ChildError) Error() string {
-	return fmt.Sprintf("Error in %s expression, operand #%d:\n%s", err.expType, err.index, err.err)
+type ErrorNotSupportedKind reflect.Kind
+
+func (e ErrorNotSupportedKind) Error() string {
+	return fmt.Sprintf("expression unmarshalling doesnt support type %s", e)
 }
 
 const (
-	ErrorNoExpressionTypeFound    = Error("no \"type\" property found for operation expression")
-	ErrorInvalidExpressionDefType = Error("invalid data type for expression definition, a map was expected")
+	ErrorNoExpressionTypeFound  = Error("no \"type\" property found for operation expression")
+	ErrorInvalidDataTypeForType = Error("invalid data type for \"type\" property")
 )
