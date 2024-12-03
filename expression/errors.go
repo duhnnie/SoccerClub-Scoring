@@ -26,7 +26,7 @@ func (m ErrorMissingRequiredProperty) Error() string {
 type ErrorNotSupportedKind reflect.Kind
 
 func (e ErrorNotSupportedKind) Error() string {
-	return fmt.Sprintf("expression unmarshalling doesnt support type %s", e)
+	return fmt.Sprintf("expression unmarshalling doesnt support type %d", e)
 }
 
 const (
