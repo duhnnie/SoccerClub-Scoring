@@ -7,5 +7,6 @@ func (e Error) Error() string {
 }
 
 const (
-	NoScoringItemFound = Error("no specified scoring item found")
+	NoScoringItemFound           = Error("no specified scoring item found")
+	NoBooleanOperationExpression = Error("expression for scoringItem needs to be of type \"booleanOperation\"")
 )
