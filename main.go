@@ -9,6 +9,19 @@ import (
 
 type StringType string
 
+type ToMarshal struct {
+	Name string `json:"name"`
+	Age  int    `json:"age"`
+}
+
+func (t ToMarshal) MarshalJSON() ([]byte, error) {
+	return []byte("{}"), nil
+}
+
+func (t ToMarshal) UnmarshalJSON(data []byte) error {
+	return nil
+}
+
 func main() {
 	data, _ := os.ReadFile("./json/scoring-items.json")
 	repo, err := scoring.NewRepositoryFromData(data)
@@ -25,4 +38,5 @@ func main() {
 	} else {
 		println("good")
 	}
+
 }
