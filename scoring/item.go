@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 
 	"github.com/duhnnie/soccerclub-scoring/expression"
+	"github.com/duhnnie/soccerclub-scoring/resolver"
+	"github.com/duhnnie/soccerclub-scoring/variable"
 )
 
 type Item struct {
@@ -46,4 +48,23 @@ func (i *Item) UnmarshalJSON(data []byte) error {
 	i.expression = opExp
 
 	return nil
+}
+
+func (i *Item) Resolve(variables *variable.Repository) (bool, error) {
+	if i.expression.Type != expression.ExpTypeBooleanOperation {
+		return false, NoBooleanOperationExpression
+	}
+
+	r := resolver.New(variables)
+	res, err := r.Resolve(i.expression)
+
+	if err != nil {
+		return false, err
+	}
+
+	if v, ok := res.(bool); !ok {
+		return false, variable.ErrorCantResolveToType("bool")
+	} else {
+		return v, nil
+	}
 }

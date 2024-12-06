@@ -2,7 +2,8 @@ package scoring
 
 import (
 	"encoding/json"
-	"fmt"
+
+	"github.com/duhnnie/soccerclub-scoring/variable"
 )
 
 type Repository struct {
@@ -38,12 +39,10 @@ func NewRepositoryFromData(data []byte) (*Repository, error) {
 	}, nil
 }
 
-func (r *Repository) ExecuteItem(itemID string) (bool, error) {
+func (r *Repository) ExecuteItem(itemID string, variables *variable.Repository) (bool, error) {
 	if scoringItem, exists := r.items[itemID]; !exists {
-		return false, NoScoringItemFound
+		return false, ErrorNoScoringItemFound(itemID)
 	} else {
-		// TODO: call item.resolve()
-		fmt.Printf("Expression: %+v", scoringItem.expression)
-		return true, nil
+		return scoringItem.Resolve(variables)
 	}
 }

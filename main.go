@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 
 	"github.com/duhnnie/soccerclub-scoring/scoring"
+	"github.com/duhnnie/soccerclub-scoring/variable"
 )
 
 type StringType string
@@ -31,12 +33,27 @@ func main() {
 		return
 	}
 
-	_, err = repo.ExecuteItem("score-hit")
+	_, err = repo.ExecuteItem("score-hitsd", variable.NewRepo())
 
 	if err != nil {
-		fmt.Println("error", err)
+		fmt.Println("error:", err)
 	} else {
 		println("good")
 	}
 
+	matchData, _ := os.ReadFile("./json/match.json")
+	var matchVars map[string]interface{}
+	_ = json.Unmarshal(matchData, &matchVars)
+
+	predictionData, _ := os.ReadFile("./json/prediction.json")
+	var predictionVars map[string]interface{}
+	_ = json.Unmarshal(predictionData, &predictionVars)
+
+	vars := variable.NewRepo()
+	vars.Set("match", matchVars)
+	vars.Set("prediction", predictionVars)
+
+	v, err := repo.ExecuteItem("score-hit", vars)
+
+	fmt.Println(v, err)
 }
