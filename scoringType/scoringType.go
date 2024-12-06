@@ -18,17 +18,18 @@ type ScoringType struct {
 }
 
 func (s *ScoringType) sumAll(scoringItems []string, vars *variable.Repository, criteria ScoringCriteria, scoringItemsRepo *scoring.Repository) ([]*scoring.Score, error) {
+	// NOTE: panic recovering will be covered as long this method is called through ScoringType.Resolve,
+	// right now there's no problem since this method is private and is only called by ScoringType.Resolve.
 	var scores []*scoring.Score
 
 	return arrayHelpers.Reduce(scoringItems, func(scores []*scoring.Score, scoringItem string, _ int) []*scoring.Score {
-		// TODO: recover from panic
 		if res, err := scoringItemsRepo.ExecuteItem(scoringItem, vars); err != nil {
 			panic(err)
 		} else if res {
 			points, exists := criteria[scoringItem]
 
 			if !exists {
-				panic(ErrorNoPointsForSCriteria(scoringItem))
+				panic(ErrorNoPointsForCriteria(scoringItem))
 			}
 
 			scores = append(scores, &scoring.Score{
@@ -42,7 +43,8 @@ func (s *ScoringType) sumAll(scoringItems []string, vars *variable.Repository, c
 }
 
 func (s *ScoringType) sumFirstHit(scoringItems []string, vars *variable.Repository, criteria ScoringCriteria, scoringItemsRepo *scoring.Repository) ([]*scoring.Score, error) {
-	// TODO: recover from panic
+	// NOTE: panic recovering will be covered as long this method is called through ScoringType.Resolve,
+	// right now there's no problem since this method is private and is only called by ScoringType.Resolve.
 	hitIndex := slices.IndexFunc(scoringItems, func(scoringItem string) bool {
 		res, err := scoringItemsRepo.ExecuteItem(scoringItem, vars)
 
@@ -63,7 +65,7 @@ func (s *ScoringType) sumFirstHit(scoringItems []string, vars *variable.Reposito
 	points, exists := criteria[scoringItem]
 
 	if !exists {
-		panic(ErrorNoPointsForSCriteria(scoringItem))
+		panic(ErrorNoPointsForCriteria(scoringItem))
 	}
 
 	score := &scoring.Score{
@@ -76,10 +78,19 @@ func (s *ScoringType) sumFirstHit(scoringItems []string, vars *variable.Reposito
 	return scores, nil
 }
 
-func (s *ScoringType) Resolve(vars *variable.Repository, criteria ScoringCriteria, scoringItemsRepo *scoring.Repository) ([]*scoring.Score, error) {
+func (s *ScoringType) Resolve(vars *variable.Repository, criteria ScoringCriteria, scoringItemsRepo *scoring.Repository) (res []*scoring.Score, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			if e, ok := r.(error); ok {
+				err = e
+			} else {
+				panic(r)
+			}
+		}
+	}()
+
 	var scores []*scoring.Score
 
-	// TODO: recover from panic
 	return arrayHelpers.Reduce(s.Strategy, func(acc []*scoring.Score, item *ScoringStep, _ int) []*scoring.Score {
 		if item.SkipIfScore && len(acc) > 0 {
 			return acc

@@ -9,10 +9,10 @@ func (e ErrorUknownScoringStepType) Error() string {
 	return fmt.Sprintf("unknown scoringStep type: %s", string(e))
 }
 
-type ErrorNoPointsForSCriteria string
+type ErrorNoPointsForCriteria string
 
-func (e ErrorNoPointsForSCriteria) Error() string {
-	return fmt.Sprintf("no point for criteria: %s", string(e))
+func (e ErrorNoPointsForCriteria) Error() string {
+	return fmt.Sprintf("no points for criteria: %s", string(e))
 }
 
 type ErrorUknownScoringType string
