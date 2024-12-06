@@ -1,0 +1,283 @@
+[
+  {
+    "id": "first-best-hit",
+    "name": "Best hit",
+    "description": "Description for first-best-hit",
+    "strategy": [
+      {
+        "type": "sumFirstHit",
+        "skipIfThereIsScore": false,
+        "scoreItems": [
+          "score-hit",
+          "score-diff-hit",
+          "winner-hit",
+          "one-side-score-hit"
+        ]
+      }
+    ],
+    "constraints": [
+      {
+        "type": "operation",
+        "name": "gt",
+        "operands": [
+          {
+            "type": "expression",
+            "value": "score-hit"
+          },
+          {
+            "type": "expression",
+            "value": "score-diff-hit"
+          },
+          {
+            "type": "expression",
+            "value": "winner-hit"
+          },
+          {
+            "type": "expression",
+            "value": "one-side-score-hit"
+          }
+        ]
+      },
+      {
+        "type": "operation",
+        "name": "gte",
+        "operands": [
+          {
+            "type": "expression",
+            "value": "winner-hit"
+          },
+          {
+            "type": "int",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "type": "operation",
+        "name": "gte",
+        "operands": [
+          {
+            "type": "expression",
+            "value": "score-hit"
+          },
+          {
+            "type": "int",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "type": "operation",
+        "name": "gte",
+        "operands": [
+          {
+            "type": "expression",
+            "value": "score-diff-hit"
+          },
+          {
+            "type": "int",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "type": "operation",
+        "name": "gte",
+        "operands": [
+          {
+            "type": "expression",
+            "value": "one-side-score-hit"
+          },
+          {
+            "type": "int",
+            "value": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "multiple-hit",
+    "name": "Multiple hits",
+    "description": "Description for multiple-hit",
+    "strategy": [
+      {
+        "type": "sumAll",
+        "skipIfThereIsScore": false,
+        "scoreItems": [
+          "winner-hit"
+        ]
+      },
+      {
+        "type": "sumFirstHit",
+        "skipIfThereIsScore": false,
+        "scoreItems": [
+          "score-hit",
+          "score-diff-hit",
+          "one-side-score-hit"
+        ]
+      }
+    ],
+    "constraints": [
+      {
+        "type": "operation",
+        "name": "gt",
+        "operands": [
+          {
+            "type": "expression",
+            "value": "score-hit"
+          },
+          {
+            "type": "expression",
+            "value": "score-diff-hit"
+          },
+          {
+            "type": "expression",
+            "value": "one-side-score-hit"
+          }
+        ]
+      },
+      {
+        "type": "operation",
+        "name": "gte",
+        "operands": [
+          {
+            "type": "expression",
+            "value": "winner-hit"
+          },
+          {
+            "type": "int",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "type": "operation",
+        "name": "gte",
+        "operands": [
+          {
+            "type": "expression",
+            "value": "score-hit"
+          },
+          {
+            "type": "int",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "type": "operation",
+        "name": "gte",
+        "operands": [
+          {
+            "type": "expression",
+            "value": "score-diff-hit"
+          },
+          {
+            "type": "int",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "type": "operation",
+        "name": "gte",
+        "operands": [
+          {
+            "type": "expression",
+            "value": "one-side-score-hit"
+          },
+          {
+            "type": "int",
+            "value": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "all-hits",
+    "name": "All hits",
+    "description": "Description for all-hits",
+    "strategy": [
+      {
+        "type": "sumAll",
+        "skipIfThereIsScore": false,
+        "scoreItems": [
+          "score-hit",
+          "score-diff-hit",
+          "winner-hit",
+          "one-side-score-hit"
+        ]
+      }
+    ],
+    "constraints": [
+      {
+        "type": "operation",
+        "name": "gt",
+        "operands": [
+          "score-hit",
+          "score-diff-hit",
+          "winner-hit",
+          "one-side-score-hit"
+        ]
+      },
+      {
+        "type": "operation",
+        "name": "gte",
+        "operands": [
+          {
+            "type": "expression",
+            "value": "winner-hit"
+          },
+          {
+            "type": "int",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "type": "operation",
+        "name": "gte",
+        "operands": [
+          {
+            "type": "expression",
+            "value": "score-hit"
+          },
+          {
+            "type": "int",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "type": "operation",
+        "name": "gte",
+        "operands": [
+          {
+            "type": "expression",
+            "value": "score-diff-hit"
+          },
+          {
+            "type": "int",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "type": "operation",
+        "name": "gte",
+        "operands": [
+          {
+            "type": "expression",
+            "value": "one-side-score-hit"
+          },
+          {
+            "type": "int",
+            "value": 1
+          }
+        ]
+      }
+    ]
+  }
+]
