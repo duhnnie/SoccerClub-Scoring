@@ -53,7 +53,7 @@ func main() {
 	vars.Set("match", matchVars)
 	vars.Set("prediction", predictionVars)
 
-	v, err := repo.ExecuteItem("score-hit", vars)
+	v, err := repo.ExecuteItem("one-side-score-hit", vars)
 
 	fmt.Println(v, err)
 }

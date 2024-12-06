@@ -96,13 +96,13 @@ func (r *booleanOperationResolver) not(op1 expression.Expression) (bool, error) 
 }
 
 func (r *booleanOperationResolver) Resolve(name string, operands []expression.Expression) (bool, error) {
-	if name == NOT && len(operands) > 1 {
+	if name == NOT && len(operands) != 1 {
 		return false, &ErrorInvalidOperandsCount{
 			operationName: name,
 			minCount:      1,
 			maxCount:      1,
 		}
-	} else if len(operands) != 2 {
+	} else if name != NOT && len(operands) != 2 {
 		return false, &ErrorInvalidOperandsCount{
 			operationName: name,
 			minCount:      2,
