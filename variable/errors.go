@@ -23,4 +23,5 @@ func (e ErrorCantResolveToType) Error() string {
 const (
 	ErrorResolveInvalidParams     = Error("second argument needs to be a string or a slice of strings.")
 	ErrorResolveInvalidFirstParam = Error("\"target\" parameter should be a \"map[string]interface{}\" when second argument is not an empty string nor empty string slice")
+	ErrorTargetIsNIL              = Error("\"target\" parameter is nil")
 )

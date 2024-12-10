@@ -17,6 +17,10 @@ func NewRepo() *Repository {
 func Resolve(target, path interface{}) (interface{}, error) {
 	var newPath []string
 
+	if target == nil {
+		return nil, ErrorTargetIsNIL
+	}
+
 	if pathArray, ok := path.([]string); !ok {
 		if pathString, ok := path.(string); !ok {
 			return nil, ErrorResolveInvalidParams
@@ -52,7 +56,13 @@ func (r *Repository) get(variableName string) (interface{}, error) {
 		return nil, ErrorNoVariableFound(variableName)
 	}
 
-	return Resolve(targetObject, path[1:])
+	res, err := Resolve(targetObject, path[1:])
+
+	if err != nil && err == ErrorTargetIsNIL {
+		return nil, ErrorNoVariableFound(variableName)
+	}
+
+	return res, err
 }
 
 func (r *Repository) GetInt64(variableName string) (int64, error) {
