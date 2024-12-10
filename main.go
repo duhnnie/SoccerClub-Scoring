@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/duhnnie/soccerclub-scoring/scoring"
-	"github.com/duhnnie/soccerclub-scoring/scoringType"
+	"github.com/duhnnie/soccerclub-scoring/scoringMode"
 	"github.com/duhnnie/soccerclub-scoring/variable"
 )
 
@@ -81,7 +81,7 @@ func main() {
 	vars.Set("prediction", predictionVars)
 
 	data, _ = os.ReadFile("./json/scoring-types.json")
-	scoringTypeRepo, err := scoringType.NewRepoFromData(data, repo)
+	scoringModeRepo, err := scoringMode.NewRepoFromData(data, repo)
 	if err != nil {
 		panic(err)
 	}
@@ -93,7 +93,7 @@ func main() {
 		"one-side-score-hit": 1,
 	}
 
-	scores, err := scoringTypeRepo.Resolve("all-hits", vars, criteria)
+	scores, err := scoringModeRepo.Resolve("all-hits", vars, criteria)
 
 	if err != nil {
 		fmt.Println("Error:", err)

@@ -1,4 +1,4 @@
-package scoringType
+package scoringMode
 
 const (
 	ScoringStepTypeSumFirstHit = "sumFirstHit"
