@@ -3,7 +3,7 @@ package scoringMode
 import (
 	"slices"
 
-	"github.com/duhnnie/soccerclub-scoring/arrayHelpers"
+	"github.com/duhnnie/godash"
 	"github.com/duhnnie/soccerclub-scoring/scoring"
 	"github.com/duhnnie/soccerclub-scoring/types"
 )
@@ -20,7 +20,7 @@ func (s *ScoringMode) sumAll(scoringItems []string, vars types.VariableContainer
 	// right now there's no problem since this method is private and is only called by ScoringMode.Resolve.
 	var scores []*types.PredictionHit
 
-	return arrayHelpers.Reduce(scoringItems, func(scores []*types.PredictionHit, scoringItem string, _ int) []*types.PredictionHit {
+	return godash.Reduce(scoringItems, func(scores []*types.PredictionHit, scoringItem string, _ int, _ []string) []*types.PredictionHit {
 		if res, err := scoringItemsRepo.ExecuteItem(scoringItem, vars); err != nil {
 			panic(err)
 		} else if res {
@@ -89,7 +89,7 @@ func (s *ScoringMode) Resolve(vars types.VariableContainer, criteria types.Scori
 
 	var scores []*types.PredictionHit
 
-	return arrayHelpers.Reduce(s.Strategy, func(acc []*types.PredictionHit, item *ScoringStep, _ int) []*types.PredictionHit {
+	return godash.Reduce(s.Strategy, func(acc []*types.PredictionHit, item *ScoringStep, _ int, _ []*ScoringStep) []*types.PredictionHit {
 		if item.SkipIfScore && len(acc) > 0 {
 			return acc
 		}
