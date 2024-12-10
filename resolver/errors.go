@@ -53,3 +53,9 @@ type ErrorUnsupportedTypeForComparison struct {
 func (e *ErrorUnsupportedTypeForComparison) Error() string {
 	return fmt.Sprintf("unsupported type for comparison: %T", e.unsupportedType)
 }
+
+type ErrorCantResolveToType string
+
+func (e ErrorCantResolveToType) Error() string {
+	return fmt.Sprintf("can't resolve to type: %s", string(e))
+}

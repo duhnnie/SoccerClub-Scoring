@@ -14,10 +14,13 @@ func (e ErrorNoVariableFound) Error() string {
 	return fmt.Sprintf("no \"%s\" variable was found", string(e))
 }
 
-type ErrorCantResolveToType string
+type ErrorCantResolveToType struct {
+	Type     string
+	Variable string
+}
 
 func (e ErrorCantResolveToType) Error() string {
-	return fmt.Sprintf("can't resolve to type: %s", string(e))
+	return fmt.Sprintf("can't resolve variable \"%s\" to type: %s", e.Variable, e.Type)
 }
 
 const (

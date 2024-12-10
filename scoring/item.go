@@ -63,7 +63,7 @@ func (i *Item) Resolve(variables *variable.Repository) (bool, error) {
 	}
 
 	if v, ok := res.(bool); !ok {
-		return false, variable.ErrorCantResolveToType("bool")
+		return false, resolver.ErrorCantResolveToType("bool")
 	} else {
 		return v, nil
 	}

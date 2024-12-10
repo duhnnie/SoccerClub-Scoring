@@ -71,7 +71,7 @@ func (r *Repository) GetInt64(variableName string) (int64, error) {
 	} else if resolvedValue, err := r.get(variableName); err != nil {
 		return 0, err
 	} else if intValue, ok := resolvedValue.(int64); !ok {
-		return 0, ErrorCantResolveToType("int64")
+		return 0, ErrorCantResolveToType{"int64", variableName}
 	} else {
 		return intValue, nil
 	}
@@ -81,7 +81,7 @@ func (r *Repository) GetFloat64(variableName string) (float64, error) {
 	if resolvedValue, err := r.get(variableName); err != nil {
 		return 0, err
 	} else if floatValue, ok := resolvedValue.(float64); !ok {
-		return 0, ErrorCantResolveToType("float64")
+		return 0, ErrorCantResolveToType{"float64", variableName}
 	} else {
 		return floatValue, nil
 	}
@@ -91,7 +91,7 @@ func (r *Repository) GetBool(variableName string) (bool, error) {
 	if resolvedValue, err := r.get(variableName); err != nil {
 		return false, err
 	} else if boolValue, ok := resolvedValue.(bool); !ok {
-		return false, ErrorCantResolveToType("bool")
+		return false, ErrorCantResolveToType{"bool", variableName}
 	} else {
 		return boolValue, nil
 	}
@@ -101,7 +101,7 @@ func (r *Repository) GetString(variableName string) (string, error) {
 	if resolvedValue, err := r.get(variableName); err != nil {
 		return "", err
 	} else if stringValue, ok := resolvedValue.(string); !ok {
-		return "", ErrorCantResolveToType("string")
+		return "", ErrorCantResolveToType{"string", variableName}
 	} else {
 		return stringValue, nil
 	}

@@ -73,7 +73,7 @@ func (r *expressionResolver) ResolveToBoolean(e expression.Expression, out *bool
 		return nil
 	}
 
-	return variable.ErrorCantResolveToType("bool")
+	return ErrorCantResolveToType("bool")
 }
 
 func (r *expressionResolver) ResolveToInt(e expression.Expression, out *int64) error {
@@ -84,7 +84,7 @@ func (r *expressionResolver) ResolveToInt(e expression.Expression, out *int64) e
 		return nil
 	}
 
-	return variable.ErrorCantResolveToType("int64")
+	return ErrorCantResolveToType("int64")
 }
 
 func (r *expressionResolver) ResolveToUInt(e expression.Expression, out *uint64) error {
@@ -95,5 +95,5 @@ func (r *expressionResolver) ResolveToUInt(e expression.Expression, out *uint64)
 		return nil
 	}
 
-	return variable.ErrorCantResolveToType("uint64")
+	return ErrorCantResolveToType("uint64")
 }
