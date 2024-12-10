@@ -5,10 +5,8 @@ import (
 
 	"github.com/duhnnie/soccerclub-scoring/arrayHelpers"
 	"github.com/duhnnie/soccerclub-scoring/scoring"
-	"github.com/duhnnie/soccerclub-scoring/variable"
+	"github.com/duhnnie/soccerclub-scoring/types"
 )
-
-type ScoringCriteria = map[string]float64
 
 type ScoringMode struct {
 	ID          string         `json:"id"`
@@ -17,12 +15,12 @@ type ScoringMode struct {
 	Strategy    []*ScoringStep `json:"strategy"`
 }
 
-func (s *ScoringMode) sumAll(scoringItems []string, vars *variable.Repository, criteria ScoringCriteria, scoringItemsRepo *scoring.Repository) ([]*scoring.PredictionHit, error) {
+func (s *ScoringMode) sumAll(scoringItems []string, vars types.VariableContainer, criteria types.ScoringCriteria, scoringItemsRepo *scoring.Repository) ([]*types.PredictionHit, error) {
 	// NOTE: panic recovering will be covered as long this method is called through ScoringMode.Resolve,
 	// right now there's no problem since this method is private and is only called by ScoringMode.Resolve.
-	var scores []*scoring.PredictionHit
+	var scores []*types.PredictionHit
 
-	return arrayHelpers.Reduce(scoringItems, func(scores []*scoring.PredictionHit, scoringItem string, _ int) []*scoring.PredictionHit {
+	return arrayHelpers.Reduce(scoringItems, func(scores []*types.PredictionHit, scoringItem string, _ int) []*types.PredictionHit {
 		if res, err := scoringItemsRepo.ExecuteItem(scoringItem, vars); err != nil {
 			panic(err)
 		} else if res {
@@ -32,9 +30,9 @@ func (s *ScoringMode) sumAll(scoringItems []string, vars *variable.Repository, c
 				panic(ErrorNoPointsForCriteria(scoringItem))
 			}
 
-			scores = append(scores, &scoring.PredictionHit{
+			scores = append(scores, &types.PredictionHit{
 				ScoringItem: scoringItem,
-				Points:      int(points),
+				Points:      points,
 			})
 		}
 
@@ -42,7 +40,7 @@ func (s *ScoringMode) sumAll(scoringItems []string, vars *variable.Repository, c
 	}, scores), nil
 }
 
-func (s *ScoringMode) sumFirstHit(scoringItems []string, vars *variable.Repository, criteria ScoringCriteria, scoringItemsRepo *scoring.Repository) ([]*scoring.PredictionHit, error) {
+func (s *ScoringMode) sumFirstHit(scoringItems []string, vars types.VariableContainer, criteria types.ScoringCriteria, scoringItemsRepo *scoring.Repository) ([]*types.PredictionHit, error) {
 	// NOTE: panic recovering will be covered as long this method is called through ScoringMode.Resolve,
 	// right now there's no problem since this method is private and is only called by ScoringMode.Resolve.
 	hitIndex := slices.IndexFunc(scoringItems, func(scoringItem string) bool {
@@ -55,7 +53,7 @@ func (s *ScoringMode) sumFirstHit(scoringItems []string, vars *variable.Reposito
 		return res
 	})
 
-	var scores []*scoring.PredictionHit
+	var scores []*types.PredictionHit
 
 	if hitIndex == -1 {
 		return scores, nil
@@ -68,9 +66,9 @@ func (s *ScoringMode) sumFirstHit(scoringItems []string, vars *variable.Reposito
 		panic(ErrorNoPointsForCriteria(scoringItem))
 	}
 
-	score := &scoring.PredictionHit{
+	score := &types.PredictionHit{
 		ScoringItem: scoringItem,
-		Points:      int(points),
+		Points:      points,
 	}
 
 	scores = append(scores, score)
@@ -78,7 +76,7 @@ func (s *ScoringMode) sumFirstHit(scoringItems []string, vars *variable.Reposito
 	return scores, nil
 }
 
-func (s *ScoringMode) Resolve(vars *variable.Repository, criteria ScoringCriteria, scoringItemsRepo *scoring.Repository) (res []*scoring.PredictionHit, err error) {
+func (s *ScoringMode) Resolve(vars types.VariableContainer, criteria types.ScoringCriteria, scoringItemsRepo *scoring.Repository) (res []*types.PredictionHit, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			if e, ok := r.(error); ok {
@@ -89,14 +87,14 @@ func (s *ScoringMode) Resolve(vars *variable.Repository, criteria ScoringCriteri
 		}
 	}()
 
-	var scores []*scoring.PredictionHit
+	var scores []*types.PredictionHit
 
-	return arrayHelpers.Reduce(s.Strategy, func(acc []*scoring.PredictionHit, item *ScoringStep, _ int) []*scoring.PredictionHit {
+	return arrayHelpers.Reduce(s.Strategy, func(acc []*types.PredictionHit, item *ScoringStep, _ int) []*types.PredictionHit {
 		if item.SkipIfScore && len(acc) > 0 {
 			return acc
 		}
 
-		var scores []*scoring.PredictionHit
+		var scores []*types.PredictionHit
 		var err error = nil
 
 		switch item.Type {

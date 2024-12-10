@@ -5,7 +5,7 @@ import (
 
 	"github.com/duhnnie/soccerclub-scoring/expression"
 	"github.com/duhnnie/soccerclub-scoring/resolver"
-	"github.com/duhnnie/soccerclub-scoring/variable"
+	"github.com/duhnnie/soccerclub-scoring/types"
 )
 
 type Item struct {
@@ -50,7 +50,7 @@ func (i *Item) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (i *Item) Resolve(variables *variable.Repository) (bool, error) {
+func (i *Item) Resolve(variables types.VariableContainer) (bool, error) {
 	if i.expression.Type != expression.ExpTypeBooleanOperation {
 		return false, NoBooleanOperationExpression
 	}

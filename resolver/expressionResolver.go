@@ -2,17 +2,17 @@ package resolver
 
 import (
 	"github.com/duhnnie/soccerclub-scoring/expression"
-	"github.com/duhnnie/soccerclub-scoring/variable"
+	"github.com/duhnnie/soccerclub-scoring/types"
 )
 
 type expressionResolver struct {
-	variables         *variable.Repository
+	variables         types.VariableContainer
 	booleanOpResolver *booleanOperationResolver
 	intOpResolver     *intOperationResolver
 	intConstResolver  *IntConstantResolver
 }
 
-func New(variables *variable.Repository) *expressionResolver {
+func New(variables types.VariableContainer) *expressionResolver {
 	booleanOpResolver := booleanOperationResolver{}
 	intOpResolver := intOperationResolver{}
 	intConstResolver := IntConstantResolver{}

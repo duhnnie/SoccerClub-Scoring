@@ -1,6 +1,6 @@
-package scoring
+package types
 
 type PredictionHit struct {
 	ScoringItem string
-	Points      int
+	Points      float64
 }

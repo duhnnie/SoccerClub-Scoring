@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/duhnnie/soccerclub-scoring/scoring"
-	"github.com/duhnnie/soccerclub-scoring/variable"
+	"github.com/duhnnie/soccerclub-scoring/types"
 )
 
 type Repository struct {
@@ -34,7 +34,7 @@ func NewRepoFromData(data []byte, scoringItemsRepo *scoring.Repository) (*Reposi
 	return NewRepo(scoringModeItems, scoringItemsRepo), nil
 }
 
-func (r *Repository) Resolve(scoringModeID string, vars *variable.Repository, criteria ScoringCriteria) ([]*scoring.PredictionHit, error) {
+func (r *Repository) Resolve(scoringModeID string, vars types.VariableContainer, criteria types.ScoringCriteria) ([]*types.PredictionHit, error) {
 	scoringMode, exists := r.items[scoringModeID]
 	if !exists {
 		return nil, ErrorUknownScoringMode(scoringModeID)

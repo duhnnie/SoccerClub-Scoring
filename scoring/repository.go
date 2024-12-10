@@ -3,7 +3,7 @@ package scoring
 import (
 	"encoding/json"
 
-	"github.com/duhnnie/soccerclub-scoring/variable"
+	"github.com/duhnnie/soccerclub-scoring/types"
 )
 
 type Repository struct {
@@ -39,7 +39,7 @@ func NewRepositoryFromData(data []byte) (*Repository, error) {
 	}, nil
 }
 
-func (r *Repository) ExecuteItem(itemID string, variables *variable.Repository) (bool, error) {
+func (r *Repository) ExecuteItem(itemID string, variables types.VariableContainer) (bool, error) {
 	if scoringItem, exists := r.items[itemID]; !exists {
 		return false, ErrorNoScoringItemFound(itemID)
 	} else {
