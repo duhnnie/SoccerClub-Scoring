@@ -44,7 +44,11 @@ func (r *expressionResolver) resolveOperationExpression(exp *expression.Operatio
 func (r *expressionResolver) resolveVariableExpression(exp *expression.VariableExpression) (interface{}, error) {
 	switch exp.Type {
 	case expression.ExpTypeIntVariable:
-		return r.variables.GetInt64(exp.Name)
+		if v, err := r.variables.GetFloat64(exp.Name); err != nil {
+			return 0, err
+		} else {
+			return int64(v), nil
+		}
 	default:
 		return nil, expression.ErrorUnknownExpressionType(exp.Type)
 	}
@@ -71,9 +75,9 @@ func (r *expressionResolver) ResolveToBoolean(e expression.Expression, out *bool
 	} else if v, ok := res.(bool); ok {
 		*out = v
 		return nil
+	} else {
+		return ErrorCantResolveToType("bool")
 	}
-
-	return ErrorCantResolveToType("bool")
 }
 
 func (r *expressionResolver) ResolveToInt(e expression.Expression, out *int64) error {
@@ -82,9 +86,9 @@ func (r *expressionResolver) ResolveToInt(e expression.Expression, out *int64) e
 	} else if v, ok := res.(int64); ok {
 		*out = v
 		return nil
+	} else {
+		return ErrorCantResolveToType("int64")
 	}
-
-	return ErrorCantResolveToType("int64")
 }
 
 func (r *expressionResolver) ResolveToUInt(e expression.Expression, out *uint64) error {

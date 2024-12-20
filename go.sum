@@ -1,2 +1,4 @@
 github.com/duhnnie/godash v0.1.0 h1:hY9f5nANFMXZ8Lo7nvf+0jACiAs46nHdCKXFwdL4IQA=
 github.com/duhnnie/godash v0.1.0/go.mod h1:ULd3l4MWlAqnBA/w16RcGY4GApyzQMtopiGmGHecdpE=
+github.com/duhnnie/valuebox v0.1.2 h1:+T/ldkhtv3aMI7i6cnKEKi5mY0UHL9G2MLu8gEq53/M=
+github.com/duhnnie/valuebox v0.1.2/go.mod h1:VCAs9004TeHWRfEPfA+5Wt20vGp5girlAK8B2NFV3mI=

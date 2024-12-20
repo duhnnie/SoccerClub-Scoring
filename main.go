@@ -1,13 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 
 	"github.com/duhnnie/soccerclub-scoring/scoring"
 	"github.com/duhnnie/soccerclub-scoring/scoringMode"
-	"github.com/duhnnie/soccerclub-scoring/variable"
+	"github.com/duhnnie/valuebox"
 )
 
 type StringType string
@@ -60,6 +59,13 @@ func (t ToMarshal) UnmarshalJSON(data []byte) error {
 // }
 
 func main() {
+	vars := valuebox.New()
+	matchData, _ := os.ReadFile("./json/match.json")
+	vars.Set("match", matchData)
+
+	predictionData, _ := os.ReadFile("./json/prediction.json")
+	vars.Set("prediction", predictionData)
+
 	data, _ := os.ReadFile("./json/scoring-items.json")
 	repo, err := scoring.NewRepositoryFromData(data)
 
@@ -67,18 +73,6 @@ func main() {
 		fmt.Println("Error:", err)
 		return
 	}
-
-	matchData, _ := os.ReadFile("./json/match.json")
-	var matchVars map[string]interface{}
-	_ = json.Unmarshal(matchData, &matchVars)
-
-	predictionData, _ := os.ReadFile("./json/prediction.json")
-	var predictionVars map[string]interface{}
-	_ = json.Unmarshal(predictionData, &predictionVars)
-
-	vars := variable.NewRepo()
-	vars.Set("match", matchVars)
-	vars.Set("prediction", predictionVars)
 
 	data, _ = os.ReadFile("./json/scoring-types.json")
 	scoringModeRepo, err := scoringMode.NewRepoFromData(data, repo)
