@@ -3,6 +3,7 @@ package scoring
 import (
 	"encoding/json"
 
+	"github.com/duhnnie/jexp/expression"
 	"github.com/duhnnie/soccerclub-scoring/types"
 )
 
@@ -16,19 +17,14 @@ func NewRepository(items map[string]*Item) *Repository {
 	}
 }
 
-func NewRepositoryFromData(data []byte) (*Repository, error) {
-	var jsonStruct []json.RawMessage
+func NewRepositoryFromData(data []json.RawMessage) (*Repository, int, error) {
 	items := map[string]*Item{}
 
-	if err := json.Unmarshal(data, &jsonStruct); err != nil {
-		return nil, err
-	}
-
-	for _, itemData := range jsonStruct {
+	for index, itemData := range data {
 		var item Item
 
 		if err := json.Unmarshal(itemData, &item); err != nil {
-			return nil, err
+			return nil, index, &Error{ErrorCodeCantParseToItem, err}
 		}
 
 		items[item.id] = &item
@@ -36,7 +32,16 @@ func NewRepositoryFromData(data []byte) (*Repository, error) {
 
 	return &Repository{
 		items: items,
-	}, nil
+	}, 0, nil
+}
+
+func (r *Repository) RegisterItem(id, name, description string, expression expression.Expression[bool]) {
+	r.items[id] = &Item{
+		id:          id,
+		name:        name,
+		description: description,
+		expression:  expression,
+	}
 }
 
 func (r *Repository) ExecuteItem(itemID string, variables types.VariableContainer) (bool, error) {

@@ -2,9 +2,10 @@ package scoring
 
 import (
 	"encoding/json"
+	"fmt"
 
-	"github.com/duhnnie/soccerclub-scoring/expression"
-	"github.com/duhnnie/soccerclub-scoring/resolver"
+	"github.com/duhnnie/jexp"
+	"github.com/duhnnie/jexp/expression"
 	"github.com/duhnnie/soccerclub-scoring/types"
 )
 
@@ -12,7 +13,7 @@ type Item struct {
 	id          string
 	name        string
 	description string
-	expression  *expression.OperationExpression
+	expression  expression.Expression[bool]
 }
 
 func (i *Item) UnmarshalJSON(data []byte) error {
@@ -27,44 +28,28 @@ func (i *Item) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	exp, err := expression.UnmarshalExpression(jsonStruct.Expression)
+	exp, errPath, err := jexp.New[bool](jsonStruct.Expression)
 
 	if err != nil {
-		return err
-	}
-
-	var opExp *expression.OperationExpression
-	var ok bool
-
-	if opExp, ok = exp.(*expression.OperationExpression); !ok {
-		return NoBooleanOperationExpression
-	} else if opExp.Type != expression.ExpTypeBooleanOperation {
-		return NoBooleanOperationExpression
+		// TODO: return custom error in which errorPath is used.
+		return fmt.Errorf("error at %s: %s", errPath, err)
 	}
 
 	i.id = jsonStruct.ID
 	i.name = jsonStruct.Name
 	i.description = jsonStruct.Description
-	i.expression = opExp
+	i.expression = exp
 
 	return nil
 }
 
 func (i *Item) Resolve(variables types.VariableContainer) (bool, error) {
-	if i.expression.Type != expression.ExpTypeBooleanOperation {
-		return false, NoBooleanOperationExpression
-	}
-
-	r := resolver.New(variables)
-	res, err := r.Resolve(i.expression)
+	res, errPath, err := i.expression.Resolve(variables)
 
 	if err != nil {
-		return false, err
+		// TODO: use custom error using errPath in it.
+		return false, fmt.Errorf("error at %s: %s", errPath, err)
 	}
 
-	if v, ok := res.(bool); !ok {
-		return false, resolver.ErrorCantResolveToType("bool")
-	} else {
-		return v, nil
-	}
+	return res, nil
 }

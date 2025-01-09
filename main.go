@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 
@@ -67,10 +68,19 @@ func main() {
 	vars.Set("prediction", predictionData)
 
 	data, _ := os.ReadFile("./json/scoring-items.json")
-	repo, err := scoring.NewRepositoryFromData(data)
+
+	var jsonArr []json.RawMessage
+	err := json.Unmarshal(data, &jsonArr)
 
 	if err != nil {
-		fmt.Println("Error:", err)
+		fmt.Println("Can't convert input into an array of bytes")
+		return
+	}
+
+	repo, index, err := scoring.NewRepositoryFromData(jsonArr)
+
+	if err != nil {
+		fmt.Printf("Error at creating scoring item # %d: %s\n", index, err)
 		return
 	}
 
