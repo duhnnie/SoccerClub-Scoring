@@ -3,6 +3,7 @@
     "id": "score-hit",
     "name": "Score Hit",
     "description": "When prediction hit exact score",
+    "expEngine": "jexp",
     "expression": {
       "type": "and",
       "operands": [
@@ -43,6 +44,7 @@
     "id": "score-diff-hit",
     "name": "Score Diff Hit",
     "description": "When prediction hits the winner (not draw) and hits score difference",
+    "expEngine": "jexp",
     "expression": {
       "type": "and",
       "operands": [
@@ -106,6 +108,8 @@
     "id": "winner-hit",
     "name": "Winner Hit",
     "description": "When prediction hit winner (or draw) but not score",
+    "expEngine": "jexp",
+    "_expression": "match.home.score == prediction.home.score && match.away.score == prediction.away.score",
     "expression": {
       "type": "eq",
       "operands": [
@@ -172,7 +176,9 @@
     "id": "one-side-score-hit",
     "name": "One Side Score Hit",
     "description": "When prediction doesn't hit winner (or draw) but hits one side score",
-    "expression": {
+    "expEngine": "jsone",
+    "expression": "clamp(match.home.score - match.away.score, -1, 1) == clamp(prediction.home.score - prediction.away.score, -1, 1)",
+    "_expression": {
       "type": "or",
       "operands": [
         {

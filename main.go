@@ -69,18 +69,18 @@ func main() {
 
 	data, _ := os.ReadFile("./json/scoring-items.json")
 
-	var jsonArr []json.RawMessage
-	err := json.Unmarshal(data, &jsonArr)
+	// var jsonArr []json.RawMessage
+	// err := json.Unmarshal(data, &jsonArr)
 
-	if err != nil {
-		fmt.Println("Can't convert input into an array of bytes")
-		return
-	}
+	// if err != nil {
+	// 	fmt.Println("Can't convert input into an array of bytes")
+	// 	return
+	// }
 
-	repo, index, err := scoring.NewRepositoryFromData(jsonArr)
+	var repo *scoring.Repository
 
-	if err != nil {
-		fmt.Printf("Error at creating scoring item # %d: %s\n", index, err)
+	if err := json.Unmarshal(data, &repo); err != nil {
+		fmt.Printf("Error at creating scoring repo: %s\n", err)
 		return
 	}
 
@@ -109,4 +109,13 @@ func main() {
 	}
 
 	// fmt.Printf("%+v\n", scores)
+
+	var je = scoring.NewJSONeItem("asdfsad", "asdfsadf", "asdfsadf", "clamp(match.home.score - match.away.score, -1, 1) == clamp(prediction.home.score - prediction.away.score, -1, 1)")
+	res, err := je.Resolve(vars)
+
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(res)
 }
