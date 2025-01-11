@@ -1,82 +1,29 @@
 package scoringMode
 
 import (
-	"slices"
+	"errors"
 
 	"github.com/duhnnie/godash"
+	"github.com/duhnnie/soccerclub-scoring/constraint"
 	"github.com/duhnnie/soccerclub-scoring/scoring"
 	"github.com/duhnnie/soccerclub-scoring/types"
 )
 
 type ScoringMode struct {
-	ID          string         `json:"id"`
-	Name        string         `json:"name"`
-	Description string         `json:"description"`
-	Strategy    []*ScoringStep `json:"strategy"`
+	ID          string            `json:"id"`
+	Name        string            `json:"name"`
+	Description string            `json:"description"`
+	Strategy    []ScoringStrategy `json:"strategy"`
+	Constraints []constraint.Constraint
 }
 
-func (s *ScoringMode) sumAll(scoringItems []string, vars types.VariableContainer, criteria types.ScoringCriteria, scoringItemsRepo *scoring.Repository) ([]*types.PredictionHit, error) {
-	// NOTE: panic recovering will be covered as long this method is called through ScoringMode.Resolve,
-	// right now there's no problem since this method is private and is only called by ScoringMode.Resolve.
-	var scores []*types.PredictionHit
-
-	return godash.Reduce(scoringItems, func(scores []*types.PredictionHit, scoringItem string, _ int, _ []string) []*types.PredictionHit {
-		if res, err := scoringItemsRepo.ExecuteItem(scoringItem, vars); err != nil {
-			panic(err)
-		} else if res {
-			points, exists := criteria[scoringItem]
-
-			if !exists {
-				panic(ErrorNoPointsForCriteria(scoringItem))
-			}
-
-			scores = append(scores, &types.PredictionHit{
-				ScoringItem: scoringItem,
-				Points:      points,
-			})
-		}
-
-		return scores
-	}, scores), nil
-}
-
-func (s *ScoringMode) sumFirstHit(scoringItems []string, vars types.VariableContainer, criteria types.ScoringCriteria, scoringItemsRepo *scoring.Repository) ([]*types.PredictionHit, error) {
-	// NOTE: panic recovering will be covered as long this method is called through ScoringMode.Resolve,
-	// right now there's no problem since this method is private and is only called by ScoringMode.Resolve.
-	hitIndex := slices.IndexFunc(scoringItems, func(scoringItem string) bool {
-		res, err := scoringItemsRepo.ExecuteItem(scoringItem, vars)
-
-		if err != nil {
-			panic(err)
-		}
-
-		return res
+func (s *ScoringMode) AreConstraintsMeet(context *types.ScoringCriteria) bool {
+	return godash.Every(s.Constraints, func(c constraint.Constraint, _ int, _ []constraint.Constraint) bool {
+		return c.IsMet(context)
 	})
-
-	var scores []*types.PredictionHit
-
-	if hitIndex == -1 {
-		return scores, nil
-	}
-
-	scoringItem := scoringItems[hitIndex]
-	points, exists := criteria[scoringItem]
-
-	if !exists {
-		panic(ErrorNoPointsForCriteria(scoringItem))
-	}
-
-	score := &types.PredictionHit{
-		ScoringItem: scoringItem,
-		Points:      points,
-	}
-
-	scores = append(scores, score)
-
-	return scores, nil
 }
 
-func (s *ScoringMode) Resolve(vars types.VariableContainer, criteria types.ScoringCriteria, scoringItemsRepo *scoring.Repository) (res []*types.PredictionHit, err error) {
+func (s *ScoringMode) Resolve(context types.PredictionContext, predictions []types.Prediction, criteria *types.ScoringCriteria, scoringItemsRepo *scoring.Repository) (res types.PredictionScores, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			if e, ok := r.(error); ok {
@@ -87,29 +34,29 @@ func (s *ScoringMode) Resolve(vars types.VariableContainer, criteria types.Scori
 		}
 	}()
 
-	var scores []*types.PredictionHit
+	if !s.AreConstraintsMeet(criteria) {
+		return nil, errors.New("constraints are not met")
+	}
 
-	return godash.Reduce(s.Strategy, func(acc []*types.PredictionHit, item *ScoringStep, _ int, _ []*ScoringStep) []*types.PredictionHit {
-		if item.SkipIfScore && len(acc) > 0 {
-			return acc
-		}
+	return godash.Reduce(predictions, func(acc types.PredictionScores, p types.Prediction, _ int, _ []types.Prediction) types.PredictionScores {
+		context.SetPrediction(p.GetBody())
 
-		var scores []*types.PredictionHit
-		var err error = nil
+		hits := godash.Reduce(s.Strategy, func(acc []*types.PredictionHit, item ScoringStrategy, _ int, _ []ScoringStrategy) []*types.PredictionHit {
+			if item.SkipIfHit() && len(acc) > 0 {
+				return acc
+			}
 
-		switch item.Type {
-		case ScoringStepTypeSumAll:
-			scores, err = s.sumAll(item.Items, vars, criteria, scoringItemsRepo)
-		case ScoringStepTypeSumFirstHit:
-			scores, err = s.sumFirstHit(item.Items, vars, criteria, scoringItemsRepo)
-		default:
-			panic(ErrorUknownScoringStepMode(item.Type))
-		}
+			scores, err := item.Execute(scoringItemsRepo, context, criteria)
 
-		if err != nil {
-			panic(err)
-		}
+			if err != nil {
+				panic(err)
+			}
 
-		return append(acc, scores...)
-	}, scores), nil
+			return append(acc, scores...)
+		}, []*types.PredictionHit{})
+
+		acc[p.GetID()] = hits
+
+		return acc
+	}, types.PredictionScores{}), nil
 }

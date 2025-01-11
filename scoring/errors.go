@@ -2,9 +2,9 @@ package scoring
 
 import "fmt"
 
-type ErrorNoScoringItemFound string
+type ScoringItemNotFoundError string
 
-func (e ErrorNoScoringItemFound) Error() string {
+func (e ScoringItemNotFoundError) Error() string {
 	return fmt.Sprintf("no \"%s\" scoring item found", string(e))
 }
 

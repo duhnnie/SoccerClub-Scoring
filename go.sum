@@ -1,11 +1,5 @@
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/duhnnie/godash v0.2.0 h1:Y46L3Yx1GehkU9ayFErr+KPnDpSl4uZ5TBw8JCTGdP0=
-github.com/duhnnie/godash v0.2.0/go.mod h1:ULd3l4MWlAqnBA/w16RcGY4GApyzQMtopiGmGHecdpE=
-github.com/duhnnie/godash v0.3.0 h1:uR0BT66K8vc1NaWyUkguWZCaVjWx+s0qUWnC97GvgVQ=
-github.com/duhnnie/godash v0.3.0/go.mod h1:ULd3l4MWlAqnBA/w16RcGY4GApyzQMtopiGmGHecdpE=
-github.com/duhnnie/valuebox v0.1.2 h1:+T/ldkhtv3aMI7i6cnKEKi5mY0UHL9G2MLu8gEq53/M=
-github.com/duhnnie/valuebox v0.1.2/go.mod h1:VCAs9004TeHWRfEPfA+5Wt20vGp5girlAK8B2NFV3mI=
 github.com/json-e/json-e/v4 v4.8.0 h1:KRM0WCEKzcFxHibQJA0Ej90PSaWnkKCK8L4t7siNDJ4=
 github.com/json-e/json-e/v4 v4.8.0/go.mod h1:DXke78nGHjXWOSZJUlYFJPyFNIrTz2ZxQ3ibBkL0rj8=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

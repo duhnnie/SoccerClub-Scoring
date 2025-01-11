@@ -34,8 +34,8 @@ func (i *JExpItem) GetID() string {
 	return i.id
 }
 
-func (i *JExpItem) Resolve(variables types.VariableContainer) (bool, error) {
-	res, errPath, err := i.expression.Resolve(variables)
+func (i *JExpItem) Resolve(context types.VariableContainer) (bool, error) {
+	res, errPath, err := i.expression.Resolve(context)
 
 	if err != nil {
 		return false, &JExpItemError{errPath, err}

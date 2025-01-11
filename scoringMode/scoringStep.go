@@ -5,6 +5,7 @@ const (
 	ScoringStepTypeSumAll      = "sumAll"
 )
 
+// TODO: Remove
 type ScoringStep struct {
 	Type        string        `json:"type"`
 	SkipIfScore bool          `json:"skipIfScore"`

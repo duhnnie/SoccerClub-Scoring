@@ -3,6 +3,7 @@ package scoringMode
 import "fmt"
 
 // TODO: change the name of "Step", it's too generic
+// TODO: maybe this is not gonna be necessary
 type ErrorUknownScoringStepMode string
 
 func (e ErrorUknownScoringStepMode) Error() string {

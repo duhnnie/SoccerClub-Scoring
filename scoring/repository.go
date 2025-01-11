@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 
 	"github.com/duhnnie/jexp/expression"
-	"github.com/duhnnie/soccerclub-scoring/types"
 )
 
 type Repository struct {
@@ -68,10 +67,15 @@ func (r *Repository) RegisterItem(id, name, description string, expression expre
 	}
 }
 
-func (r *Repository) ExecuteItem(itemID string, variables types.VariableContainer) (bool, error) {
-	if scoringItem, exists := r.items[itemID]; !exists {
-		return false, ErrorNoScoringItemFound(itemID)
-	} else {
-		return scoringItem.Resolve(variables)
-	}
+func (r *Repository) Get(id string) Item {
+	return r.items[id]
 }
+
+// TODO: Remove this method, repository should execute anything
+// func (r *Repository) ExecuteItem(itemID string, context types.VariableContainer) (bool, error) {
+// 	if scoringItem, exists := r.items[itemID]; !exists {
+// 		return false, ErrorNoScoringItemFound(itemID)
+// 	} else {
+// 		return scoringItem.Resolve(context)
+// 	}
+// }
