@@ -20,7 +20,7 @@ func (s *SumFirstStrategy) SkipIfHit() bool {
 	return s.skipIfHit
 }
 
-func (s *SumFirstStrategy) Execute(scoringItemsRepo *scoring.Repository, context types.VariableContainer, criteria types.ScoringCriteria) (res []*types.PredictionHit, err error) {
+func (s *SumFirstStrategy) Execute(scoringItemsStore types.Store[scoring.Item], context types.VariableContainer, criteria *types.ScoringCriteria) (res []*types.PredictionHit, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			if e, ok := r.(error); ok {
@@ -33,9 +33,9 @@ func (s *SumFirstStrategy) Execute(scoringItemsRepo *scoring.Repository, context
 	}()
 
 	hitIndex := slices.IndexFunc(s.scoringItems, func(scoringItemId string) bool {
-		scoringItem := scoringItemsRepo.Get(scoringItemId)
+		scoringItem, found := scoringItemsStore.Get(scoringItemId)
 
-		if scoringItem == nil {
+		if !found {
 			panic(scoring.ScoringItemNotFoundError(scoringItemId))
 		}
 

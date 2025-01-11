@@ -16,6 +16,7 @@ func NewRepository(items map[string]Item) *Repository {
 	}
 }
 
+// TOOD: remove this function or move it to a Repository
 func (r *Repository) UnmarshalJSON(data []byte) error {
 	var itemDefs []struct {
 		ID               string          `json:"id"`
@@ -67,8 +68,10 @@ func (r *Repository) RegisterItem(id, name, description string, expression expre
 	}
 }
 
-func (r *Repository) Get(id string) Item {
-	return r.items[id]
+func (r *Repository) Get(id string) (Item, bool) {
+	v, exists := r.items[id]
+
+	return v, exists
 }
 
 // TODO: Remove this method, repository should execute anything

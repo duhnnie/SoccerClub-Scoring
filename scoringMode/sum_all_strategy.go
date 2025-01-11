@@ -19,7 +19,7 @@ func (s *SumAllStrategy) SkipIfHit() bool {
 	return s.skipIfHit
 }
 
-func (s *SumAllStrategy) Execute(scoringItemsRepo *scoring.Repository, context types.VariableContainer, criteria types.ScoringCriteria) (res []*types.PredictionHit, err error) {
+func (s *SumAllStrategy) Execute(scoringItemsStore types.Store[scoring.Item], context types.VariableContainer, criteria *types.ScoringCriteria) (res []*types.PredictionHit, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			if e, ok := r.(error); ok {
@@ -32,9 +32,9 @@ func (s *SumAllStrategy) Execute(scoringItemsRepo *scoring.Repository, context t
 	}()
 
 	return godash.Reduce(s.scoringItems, func(hits []*types.PredictionHit, scoringItemId string, _ int, _ []string) []*types.PredictionHit {
-		scoringItem := scoringItemsRepo.Get(scoringItemId)
+		scoringItem, found := scoringItemsStore.Get(scoringItemId)
 
-		if scoringItem == nil {
+		if !found {
 			panic(scoring.ScoringItemNotFoundError(scoringItemId))
 		}
 

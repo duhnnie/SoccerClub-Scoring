@@ -6,9 +6,9 @@ import (
 )
 
 type ScoringStrategy interface {
-	GetID() string
-	GetName() string
-	GetDescription() string
+	// GetID() string
+	// GetName() string
+	// GetDescription() string
 	SkipIfHit() bool
-	Execute(scoreItems *scoring.Repository, context types.VariableContainer, criteria *types.ScoringCriteria) (res []*types.PredictionHit, err error)
+	Execute(scoreItemStore types.Store[scoring.Item], context types.VariableContainer, criteria *types.ScoringCriteria) (res []*types.PredictionHit, err error)
 }

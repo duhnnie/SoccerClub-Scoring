@@ -2,23 +2,19 @@ package scoringMode
 
 import (
 	"encoding/json"
-
-	"github.com/duhnnie/soccerclub-scoring/scoring"
+	"fmt"
 )
 
 type Repository struct {
-	items            map[string]*ScoringMode
-	scoringItemsRepo *scoring.Repository
+	items map[string]*ScoringMode
 }
 
-func NewRepo(items map[string]*ScoringMode, scoringItemsRepo *scoring.Repository) *Repository {
-	return &Repository{
-		items:            items,
-		scoringItemsRepo: scoringItemsRepo,
-	}
+func NewRepo(items map[string]*ScoringMode) *Repository {
+	return &Repository{items: items}
 }
 
-func NewRepoFromData(data []byte, scoringItemsRepo *scoring.Repository) (*Repository, error) {
+// TODO: remove this or move it to a repository/factory
+func NewRepoFromData(data []byte) (*Repository, error) {
 	var scoringModesSlice []*ScoringMode
 	scoringModeItems := map[string]*ScoringMode{}
 
@@ -30,7 +26,15 @@ func NewRepoFromData(data []byte, scoringItemsRepo *scoring.Repository) (*Reposi
 		scoringModeItems[scoringModeItem.ID] = scoringModeItem
 	}
 
-	return NewRepo(scoringModeItems, scoringItemsRepo), nil
+	return NewRepo(scoringModeItems), nil
+}
+
+func (r *Repository) Get(scoringModeID string) (*ScoringMode, error) {
+	if s, exists := r.items[scoringModeID]; exists {
+		return s, nil
+	}
+
+	return nil, fmt.Errorf("no \"%s\" scoring mode found", scoringModeID)
 }
 
 // func (r *Repository) Resolve(scoringModeID string, vars types.VariableContainer, criteria types.ScoringCriteria) ([]*types.PredictionHit, error) {

@@ -177,7 +177,7 @@
     "name": "One Side Score Hit",
     "description": "When prediction doesn't hit winner (or draw) but hits one side score",
     "expEngine": "jsone",
-    "expression": "clamp(match.home.score - match.away.score, -1, 1) == clamp(prediction.home.score - prediction.away.score, -1, 1)",
+    "expression": "match.home.score == prediction.home.score || match.away.score == prediction.away.score",
     "_expression": {
       "type": "or",
       "operands": [

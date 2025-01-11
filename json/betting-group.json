@@ -1,0 +1,12 @@
+[
+    {
+        "id": "1234567",
+        "criteria": {
+            "score-hit":          8,
+            "score-diff-hit":     5,
+            "winner-hit":         3,
+            "one-side-score-hit": 1
+        },
+        "scoringMode": "multiple-hit"
+    }
+]

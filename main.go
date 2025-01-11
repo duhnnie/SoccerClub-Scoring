@@ -5,117 +5,55 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/duhnnie/soccerclub-scoring/match"
+	predictionevalcontext "github.com/duhnnie/soccerclub-scoring/predictionEvalContext"
+	"github.com/duhnnie/soccerclub-scoring/repo"
+	"github.com/duhnnie/soccerclub-scoring/resolver"
 	"github.com/duhnnie/soccerclub-scoring/scoring"
-	"github.com/duhnnie/soccerclub-scoring/scoringMode"
-	"github.com/duhnnie/valuebox"
+	"github.com/duhnnie/soccerclub-scoring/store"
 )
 
-type StringType string
-
-type ToMarshal struct {
-	Name string `json:"name"`
-	Age  int    `json:"age"`
-}
-
-func (t ToMarshal) MarshalJSON() ([]byte, error) {
-	return []byte("{}"), nil
-}
-
-func (t ToMarshal) UnmarshalJSON(data []byte) error {
-	return nil
-}
-
-// func main() {
-// 	data, _ := os.ReadFile("./json/scoring-items.json")
-// 	repo, err := scoring.NewRepositoryFromData(data)
-
-// 	if err != nil {
-// 		fmt.Println("Error:", err)
-// 		return
-// 	}
-
-// 	_, err = repo.ExecuteItem("score-hitsd", variable.NewRepo())
-
-// 	if err != nil {
-// 		fmt.Println("error:", err)
-// 	} else {
-// 		println("good")
-// 	}
-
-// 	matchData, _ := os.ReadFile("./json/match.json")
-// 	var matchVars map[string]interface{}
-// 	_ = json.Unmarshal(matchData, &matchVars)
-
-// 	predictionData, _ := os.ReadFile("./json/prediction.json")
-// 	var predictionVars map[string]interface{}
-// 	_ = json.Unmarshal(predictionData, &predictionVars)
-
-// 	vars := variable.NewRepo()
-// 	vars.Set("match", matchVars)
-// 	vars.Set("prediction", predictionVars)
-
-// 	v, err := repo.ExecuteItem("one-side-score-hit", vars)
-
-// 	fmt.Println(v, err)
-// }
-
 func main() {
-	vars := valuebox.New()
-	matchData, _ := os.ReadFile("./json/match.json")
-	vars.Set("match", matchData)
+	scoringItemsData, _ := os.ReadFile("./json/scoring-items.json")
+	scoringItemsRepo := &scoring.Repository{}
 
-	predictionData, _ := os.ReadFile("./json/prediction.json")
-	vars.Set("prediction", predictionData)
+	if err := json.Unmarshal(scoringItemsData, scoringItemsRepo); err != nil {
+		panic(err)
+	}
 
-	data, _ := os.ReadFile("./json/scoring-items.json")
+	s, err := store.NewScoringModeStore()
 
-	// var jsonArr []json.RawMessage
-	// err := json.Unmarshal(data, &jsonArr)
+	if err != nil {
+		panic(err)
+	}
+
+	bg, err := repo.BettingGroupRepo().Get("1234567")
+
+	if err != nil {
+		panic(err)
+	}
+
+	m, err := match.Repository().Get("asdf")
+
+	if err != nil {
+		panic(err)
+	}
+
+	// predictions, err := bg.GetPredictions(m.GetID())
 
 	// if err != nil {
-	// 	fmt.Println("Can't convert input into an array of bytes")
-	// 	return
+	// 	panic(err)
 	// }
 
-	var repo *scoring.Repository
+	r := resolver.New(scoringItemsRepo, s)
+	ctx := &predictionevalcontext.PredictionEvalCtx{}
+	ctx.SetMatch(m)
 
-	if err := json.Unmarshal(data, &repo); err != nil {
-		fmt.Printf("Error at creating scoring repo: %s\n", err)
-		return
-	}
-
-	data, _ = os.ReadFile("./json/scoring-types.json")
-	scoringModeRepo, err := scoringMode.NewRepoFromData(data, repo)
-	if err != nil {
-		panic(err)
-	}
-
-	criteria := map[string]float64{
-		"score-hit":          8,
-		"score-diff-hit":     5,
-		"winner-hit":         3,
-		"one-side-score-hit": 1,
-	}
-
-	scores, err := scoringModeRepo.Resolve("all-hits", vars, criteria)
-
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-
-	for _, score := range scores {
-		fmt.Printf("%+v\n", score)
-	}
-
-	// fmt.Printf("%+v\n", scores)
-
-	var je = scoring.NewJSONeItem("asdfsad", "asdfsadf", "asdfsadf", "clamp(match.home.score - match.away.score, -1, 1) == clamp(prediction.home.score - prediction.away.score, -1, 1)")
-	res, err := je.Resolve(vars)
+	scores, err := r.Resolve(ctx, bg)
 
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(res)
+	fmt.Println(scores)
 }

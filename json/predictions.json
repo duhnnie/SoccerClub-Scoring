@@ -1,0 +1,106 @@
+[
+  {
+    "id": "Daniel",
+    "name": "Daniel",
+    "prediction": {
+      "home": {
+        "score": 3
+      },
+      "away": {
+        "score": 2
+      }
+    },
+    "multiplier": 0
+  },
+  {
+    "id": "Roberto",
+    "name": "Roberto",
+    "prediction": {
+      "home": {
+        "score": 2
+      },
+      "away": {
+        "score": 2
+      }
+    },
+    "multiplier": 0
+  },
+  {
+    "id": "Vladimir",
+    "name": "Vladimir",
+    "prediction": {
+      "home": {
+        "score": 1
+      },
+      "away": {
+        "score": 2
+      }
+    },
+    "multiplier": 0
+  },
+  {
+    "id": "Serginho",
+    "name": "Serginho",
+    "prediction": {
+      "home": {
+        "score": 4
+      },
+      "away": {
+        "score": 4
+      }
+    },
+    "multiplier": 0
+  },
+  {
+    "id": "Miguel",
+    "name": "Miguel",
+    "prediction": {
+      "home": {
+        "score": 3
+      },
+      "away": {
+        "score": 2
+      }
+    },
+    "multiplier": 2
+  },
+  {
+    "id": "Quike",
+    "name": "Quike",
+    "prediction": {
+      "home": {
+        "score": 2
+      },
+      "away": {
+        "score": 2
+      }
+    },
+    "multiplier": 0
+  },
+  {
+    "id": "Manolo",
+    "name": "Manolo",
+    "prediction": {
+      "home": {
+        "score": 1
+      },
+      "away": {
+        "score": 3
+      }
+    },
+    "multiplier": 0
+  },
+  {
+    "id": "Ximena",
+    "name": "Ximena",
+    "prediction": {
+      "home": {
+        "score": 0
+      },
+      "away": {
+        "score": 0
+      }
+    },
+    "multiplier": 0
+  }
+]

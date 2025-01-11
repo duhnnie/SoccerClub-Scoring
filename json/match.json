@@ -1,8 +1,12 @@
 {
-  "home": {
-    "score": 0
-  },
-  "away": {
-    "score": 2
+  "id": "45eregas",
+  "title": "Bolivia vs Colombia",
+  "facts": {
+    "home": {
+      "score": 0
+    },
+    "away": {
+      "score": 2
+    }
   }
 }

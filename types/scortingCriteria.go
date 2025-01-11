@@ -8,7 +8,9 @@ type ScoringCriteria struct {
 }
 
 func NewScoringCriteria() *ScoringCriteria {
-	return &ScoringCriteria{}
+	return &ScoringCriteria{
+		criteria: map[string]float64{},
+	}
 }
 
 func (c *ScoringCriteria) Set(name string, points float64) {
